@@ -64,7 +64,16 @@
                     <div class="form-group mt-3">
                         <label for="category">カテゴリ</label>
                         <select name="category" class="custom-select form-control @error('category') is-invalid @enderror">
-                            {{-- 次のパートで実装します --}}
+                          @foreach ($categories as $category)
+                            <optgroup label="{{$category->name}}">
+                              <!-- 大カテゴリに紐づく小カテゴリの一覧を取得 -->
+                              @foreach($category->secondaryCategories as $secondary)
+                                <option value="{{$secondary->id}}" {{old('category') == $secondary->id ? 'selected' : ''}}>
+                                  {{$secondary->name}}
+                                </option>
+                              @endforeach
+                            </optgroup>
+                          @endforeach
                         </select>
                         @error('category')
                         <span class="invalid-feedback" role="alert">
@@ -78,6 +87,12 @@
                         <label for="condition">商品の状態</label>
                         <select name="condition" class="custom-select form-control @error('condition') is-invalid @enderror">
                             {{-- 次のパートで実装します --}}
+                            @foreach ($conditions as $condition)
+                            <!-- old('condition') == $condition->id 前回選んだ商品状態を表示させる -->
+                            <option value="{{$condition->id}}" {{old('condition') == $condition->id ? 'selected' : ''}}>
+                              {{$condition->name}}
+                            </option>
+                          @endforeach
                         </select>
                         @error('condition')
                         <span class="invalid-feedback" role="alert">
