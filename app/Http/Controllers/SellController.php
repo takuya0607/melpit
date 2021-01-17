@@ -56,6 +56,7 @@ class SellController extends Controller
       $item->price = $request->input('price');
 
       // Item::STATE_SELLINGは商品の出品状態を表す定数で、ここでは「出品中」を設定
+      // item.phpに定数の記載を記述
       $item->state = Item::STATE_SELLING;
       $item->save();
 

@@ -5,6 +5,36 @@
     </a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
+
+        <!-- 検索フォームの記述 -->
+        <form class="form-inline" method="GET" action="{{ route('top') }}">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <select class="custom-select" name="category">
+                <option value="">全て</option>
+                @foreach ($categories as $category)
+                <!-- foreachで回す事で、大カテゴリの項目が全て表示される -->
+                  <!-- 大カテゴリの実装は以下 -->
+                  <option value="primary:{{$category->id}}" class="font-weight-bold" {{ $defaults['category'] == "primary:" . $category->id ? 'selected' : ''}}>{{$category->name}}</option>
+                  @foreach ($category->secondaryCategories as $secondary)
+                  <!-- 小カテゴリの実装は以下 -->
+                  <!-- どちらの場合も、valueの値を[種別]:[ID]という書式にしている -->
+                  <!-- 種別が無い場合、idが重複するため大カテゴリなのか小カテゴリなのか判別がつかなくなる -->
+                    <option value="secondary:{{$secondary->id}}" {{ $defaults['category'] == "secondary:" . $secondary->id ? 'selected' : ''}}>　{{$secondary->name}}</option>
+                  @endforeach
+                @endforeach
+              </select>
+            </div>
+            <input type="text" name="keyword" class="form-control" value="{{$defaults['keyword']}}" aria-label="Text input with dropdown button" placeholder="キーワード検索">
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-outline-dark">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+        <!-- 検索フォームの記述 -->
+
         @guest
           {{-- 非ログイン --}}
           <li class="nav-item">
