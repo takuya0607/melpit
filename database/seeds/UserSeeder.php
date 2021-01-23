@@ -14,10 +14,11 @@ class UserSeeder extends Seeder
     public function run()
     {
         factory(User::class)->create([
-            'name' => 'めるぴっと太郎',
-            'email' => 'test@test.test',
+            'name' => 'test1',
+            'email' => 'test1@test.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('testtest'),
+            'password' => Hash::make('11111111'),
+            'avatar_file_name' => 'WIOvmtjFqC6GcTEGtusfxBXIHqBVClIrtRCQBS29.jpg'
         ]);
     }
 }
