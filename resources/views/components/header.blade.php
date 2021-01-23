@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
   <div class="container">
     <a class="navbar-brand" href="{{ url('/') }}">
-        <img src="/images/logo-1.png" style="height: 39px;" alt="Melpit">
+      <img src="/images/logo-1.png" style="height: 39px;" alt="Melpit">
     </a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
@@ -58,8 +58,30 @@
 
             {{-- ドロップダウンメニュー --}}
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+              <div class="dropdown-item-text">
+                <div class="row no-gutters">
+                  <div class="col">売上金</div>
+                  <div class="col-auto">
+                    <i class="fas fa-yen-sign"></i>
+                    <span class="ml-1">{{number_format($user->sales)}}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="dropdown-item-text">
+                <div class="row no-gutters">
+                  <div class="col">出品数</div>
+                  <div class="col-auto">{{number_format($user->soldItems->count())}} 個</div>
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{{ route('sell') }}">
                 <i class="fas fa-camera text-left" style="width: 30px"></i>商品を出品する
+              </a>
+              <a class="dropdown-item" href="{{ route('mypage.sold-items') }}">
+                  <i class="fas fa-store-alt text-left" style="width: 30px"></i>出品した商品
+              </a>
+              <a class="dropdown-item" href="{{ route('mypage.bought-items') }}">
+                  <i class="fas fa-shopping-bag text-left" style="width: 30px"></i>購入した商品
               </a>
               <a class="dropdown-item" href="{{ route('mypage.edit-profile') }}">
                 <i class="far fa-address-card text-left" style="width: 30px"></i>プロフィール編集

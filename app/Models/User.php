@@ -42,4 +42,10 @@ class User extends Authenticatable
       // 第二引数には多側のキー(外部キー)であるseller_idを指定
         return $this->hasMany(Item::class, 'seller_id');
     }
+
+    // ユーザーが購入した商品を取得するメソッド
+    public function boughtItems()
+    {
+        return $this->hasMany(Item::class, 'buyer_id');
+    }
 }
