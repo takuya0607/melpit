@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\User;
+use App\Models\PrimaryCategory;
+use App\Models\ItemCondition;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\File;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -70,7 +77,6 @@ class ItemsController extends Controller
         });
       }
 
-
       // orderByRawメソッドを使って、出品中の商品を先に、購入済みの商品を後に表示
       // ORDER BY FIELD(state, 'selling', 'bought')の状態になる
 
@@ -84,7 +90,6 @@ class ItemsController extends Controller
       return view('items.items')
           ->with('items', $items);
     }
-
 
     private function escape(string $value)
     {
@@ -115,6 +120,81 @@ class ItemsController extends Controller
         return view('items.item_buy_form')
             ->with('item', $item);
     }
+
+    public function showItemEditForm(Item $item)
+    {
+      $categories = PrimaryCategory::query()
+      ->with([
+      // 連想配列のキー名としてEager Loadしたいリレーションの名前を指定
+      // 正確にはEloquent Modelでリレーションを定義しているメソッドの名前
+      'secondaryCategories' => function ($query) {
+          $query->orderBy('sort_no');
+        }
+      ])
+      ->orderBy('sort_no')
+      ->get();
+      // sort_noの昇順でitem_conditionsテーブルのデータを取得するクエリを組み立て
+      $conditions = ItemCondition::orderBy('sort_no')->get();
+
+      return view('items.item_edit_form')
+          ->with('item', $item)
+          ->with('categories', $categories)
+          ->with('conditions', $conditions);
+    }
+
+    public function editItem(Request $request,Item $item)
+    {
+      // 商品画像の更新
+        if ($request->has('item-image')) {
+          // アップロードされた画像の情報を取得
+          $fileName = $this->saveImage($request->file('item-image'));
+          $item->image_file_name = $fileName;
+        }
+
+      // 商品名の更新
+        $item->name = $request->input('name');
+      // 商品説明の更新
+        $item->description = $request->input('description');
+      // カテゴリの更新
+        $item->secondary_category_id = $request->input('category');
+      // 商品状態の更新
+        $item->item_condition_id = $request->input('condition');
+      // 商品価格の更新
+        $item->price = $request->input('price');
+
+        $item->save();
+
+        return redirect('/')
+        ->with('status', '商品情報を更新しました。');
+    }
+
+    private function saveImage(UploadedFile $file): string
+    {
+      // makeTempPathメソッドは一時ファイルを生成してパスを取得する(下で定義済み)
+      $tempPath = $this->makeTempPath();
+
+      // Intervention Imageを使用して、画像をリサイズ後、一時ファイルに保存
+      Image::make($file)->fit(300, 300)->save($tempPath);
+
+      // ファイルの保存場所を指定
+      $filePath = Storage::disk('public')
+          ->putFile('item-images', new File($tempPath));
+
+      return basename($filePath);
+    }
+
+    /**
+    * 一時的なファイルを生成してパスを返します。
+    *
+    * @return string ファイルパス
+    */
+    private function makeTempPath(): string
+    {
+      $tmp_fp = tmpfile();
+      $meta   = stream_get_meta_data($tmp_fp);
+      return $meta["uri"];
+    }
+
 
     public function buyItem(Request $request, Item $item)
     {
@@ -189,5 +269,12 @@ class ItemsController extends Controller
         }
         // トランザクションをコミット（確定）する
         DB::commit();
+    }
+
+    public function destroy(Item $item)
+    {
+      $item->delete();
+      return redirect('/')
+      ->with('status', '商品情報を削除しました。');
     }
 }

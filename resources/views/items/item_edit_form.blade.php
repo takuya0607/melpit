@@ -1,17 +1,27 @@
 @extends('layouts.app')
 
 @section('title')
-    商品出品
+    商品編集
 @endsection
 
 @section('content')
     <div class="container">
         <div class="row">
+            <div class="col-8 offset-2">
+                @if (session('status'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('status') }}
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-8 offset-2 bg-white">
 
-                <div class="font-weight-bold text-center border-bottom pb-3 pt-3" style="font-size: 24px">商品を出品する</div>
+                <div class="font-weight-bold text-center border-bottom pb-3 pt-3" style="font-size: 24px">商品を編集する</div>
 
-                <form method="POST" action="{{ route('sell') }}" class="p-5" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('item.edit',[$item->id]) }}" class="p-5" enctype="multipart/form-data">
                     @csrf
 
                     {{-- 商品画像 --}}
@@ -19,7 +29,9 @@
                     <span class="item-image-form image-picker">
                         <input type="file" name="item-image" class="d-none" accept="image/png,image/jpeg,image/gif" id="item-image" />
                         <label for="item-image" class="d-inline-block" role="button">
-                            <img src="/images/item-image-default.png" style="object-fit: cover; width: 300px; height: 300px;">
+                          <div class="col-4 offset-1">
+                              <img class="card-img-top" src="/storage/item-images/{{$item->image_file_name}}" style="object-fit: cover; width: 300px; height: 300px;">
+                          </div>
                         </label>
                     </span>
                     @error('item-image')
@@ -31,7 +43,7 @@
                     {{-- 商品名 --}}
                     <div class="form-group mt-3">
                         <label for="name">商品名</label>
-                        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $item->name) }}" required autocomplete="name" autofocus>
                         @error('name')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -42,7 +54,7 @@
                     {{-- 商品の説明 --}}
                     <div class="form-group mt-3">
                         <label for="description">商品の説明</label>
-                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" required autocomplete="description" autofocus>{{ old('description') }}</textarea>
+                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" required autocomplete="description" autofocus>{{ $item->description }}</textarea>
                         @error('description')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -53,18 +65,23 @@
                     {{-- カテゴリ --}}
                     <div class="form-group mt-3">
                         <label for="category">カテゴリ</label>
+
                         <select name="category" class="custom-select form-control @error('category') is-invalid @enderror">
                           @foreach ($categories as $category)
+                          <!-- 大カテゴリの表示(薄いグレーで表示される部分) -->
                             <optgroup label="{{$category->name}}">
                               <!-- 大カテゴリに紐づく小カテゴリの一覧を取得 -->
                               @foreach($category->secondaryCategories as $secondary)
-                                <option value="{{$secondary->id}}" {{old('category') == $secondary->id ? 'selected' : ''}}>
-                                  {{$secondary->name}}
-                                </option>
+                                  <!-- リストの中身 -->
+                                    <option value="{{$secondary->id}}" @if($item->secondaryCategory->id == $secondary->id) selected @endif>
+                                    <!-- リストの中身 -->
+                                      {{$secondary->name}}
+                                    </option>
                               @endforeach
                             </optgroup>
                           @endforeach
                         </select>
+
                         @error('category')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -78,8 +95,8 @@
                         <select name="condition" class="custom-select form-control @error('condition') is-invalid @enderror">
                             {{-- 次のパートで実装します --}}
                             @foreach ($conditions as $condition)
-                            <!-- old('condition') == $condition->id 前回選んだ商品状態を表示させる -->
-                            <option value="{{$condition->id}}" {{old('condition') == $condition->id ? 'selected' : ''}}>
+                            <!-- 前回選んだ商品状態を表示させる -->
+                            <option value="{{$condition->id}}" @if($item->condition->name == $condition->name) selected @endif>
                               {{$condition->name}}
                             </option>
                           @endforeach
@@ -94,21 +111,55 @@
                     {{-- 販売価格 --}}
                     <div class="form-group mt-3">
                         <label for="price">販売価格</label>
-                        <input id="price" type="number" class="form-control @error('price') is-invalid @enderror" name="price" value="{{ old('price') }}" required autocomplete="price" autofocus>
+                        <input id="price" type="number" class="form-control @error('price') is-invalid @enderror" name="price" value="{{ old('price', $item->price) }}" required autocomplete="price" autofocus>
                         @error('price')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                         @enderror
                     </div>
-
+                    <br>
                     <div class="form-group mb-0 mt-3">
                         <button type="submit" class="btn btn-block btn-secondary">
-                            出品する
+                            更新する
                         </button>
                     </div>
+                    <div class="form-group mb-0 mt-3">
+                        <a class="dropdown-item" data-toggle="modal" data-target="#modal-delete-{{ $item->id }}">
+                          <button type="submit" class="btn btn-block btn-danger">
+                              削除する
+                          </button>
+                        </a>
+                    </div>
                 </form>
+
+                    <!-- modal -->
+                    <div id="modal-delete-{{ $item->id }}" class="modal fade" tabindex="-1" role="dialog">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <form method="POST" action="{{ route('item.destroy', [$item->id]) }}">
+                            @csrf
+                            @method('DELETE')
+                            <div class="modal-body">
+                              商品を削除します。本当によろしいですか？
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                              <a class="btn btn-outline-grey" data-dismiss="modal">キャンセル</a>
+                              <button type="submit" class="btn btn-danger">削除する</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- modal -->
+                    
             </div>
         </div>
     </div>
 @endsection
+

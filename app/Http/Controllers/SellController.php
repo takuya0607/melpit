@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
+use App\Models\PrimaryCategory;
+use App\Models\ItemCondition;
 
 use App\Http\Requests\SellRequest;
 use Illuminate\Http\Request;
@@ -10,10 +13,6 @@ use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-
-use App\Models\Item;
-use App\Models\PrimaryCategory;
-use App\Models\ItemCondition;
 
 class SellController extends Controller
 {
@@ -60,8 +59,8 @@ class SellController extends Controller
       $item->state = Item::STATE_SELLING;
       $item->save();
 
-      return redirect()->back()
-          ->with('status', '商品を出品しました。');
+      return redirect('/')
+      ->with('status', '商品を出品しました。');
     }
 
       /**

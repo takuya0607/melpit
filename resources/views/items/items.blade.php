@@ -7,6 +7,15 @@
 @section('content')
 <div class="container">
     <div class="row">
+        <div class="col-8 offset-2">
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
+        </div>
+    </div>
+    <div class="row">
         @foreach ($items as $item)
             <div class="col-3 mb-3">
                 <div class="card">

@@ -48,7 +48,7 @@
                 </div>
             </div>
 
-            <form id="buy-form" method="POST" action="{{route('item.buy', [$item->id])}}">
+            <form id="buy-form" method="POST" action="{{route('item.buy', [$item->id]) }}">
                 @csrf
                 <input type="hidden" id="card-token" name="card-token">
             </form>
