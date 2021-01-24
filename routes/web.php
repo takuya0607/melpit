@@ -26,12 +26,17 @@ Route::middleware('auth')
     Route::get('items/{item}/buy', 'ItemsController@showBuyItemForm')->name('item.buy');
     Route::post('items/{item}/buy', 'ItemsController@buyItem')->name('item.buy');
 
+    Route::get('items/{item}/edit', 'ItemsController@showItemEditForm')->name('item.edit');
+    Route::post('items/{item}/edit', 'ItemsController@editItem')->name('item.edit');
+
+    Route::delete('items/{item}', 'ItemsController@destroy')->name('item.destroy');
+
     Route::get('sell', 'SellController@showSellForm')->name('sell');
     Route::post('sell', 'SellController@sellItem')->name('sell');
 
   });
+  Route::prefix('mypage')
 
-Route::prefix('mypage')
   ->namespace('MyPage')
   ->middleware('auth')
   ->group(function () {
@@ -40,3 +45,6 @@ Route::prefix('mypage')
     Route::get('bought-items', 'BoughtItemsController@showBoughtItems')->name('mypage.bought-items');
     Route::get('sold-items', 'SoldItemsController@showSoldItems')->name('mypage.sold-items');
   });
+
+
+

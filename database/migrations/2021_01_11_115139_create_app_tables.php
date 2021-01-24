@@ -34,7 +34,7 @@ class CreateAppTables extends Migration
             $table->timestamps();
             // primary_category_idはprimary_categoriesテーブルのidを参照する
             // 外部キーを定義する際、参照先のテーブルがすでに作成されている必要があるので記述順に注意する。
-            $table->foreign('primary_category_id')->references('id')->on('primary_categories');
+            $table->foreign('primary_category_id')->references('id')->on('primary_categories')->onDelete('cascade');
         });
 
         Schema::create('item_conditions', function (Blueprint $table) {
@@ -59,15 +59,14 @@ class CreateAppTables extends Migration
             $table->text('description');
             $table->unsignedInteger('price');
             $table->string('state');
+            $table->timestamps();
             // 購入された日付
             $table->timestamp('bought_at')->nullable();
 
-            $table->timestamps();
-
-            $table->foreign('seller_id')->references('id')->on('users');
-            $table->foreign('buyer_id')->references('id')->on('users');
-            $table->foreign('secondary_category_id')->references('id')->on('secondary_categories');
-            $table->foreign('item_condition_id')->references('id')->on('item_conditions');
+            $table->foreign('seller_id')->references('id')->on('users')->onDelete('cascade');;
+            $table->foreign('buyer_id')->references('id')->on('users')->onDelete('cascade');;
+            $table->foreign('secondary_category_id')->references('id')->on('secondary_categories')->onDelete('cascade');
+            $table->foreign('item_condition_id')->references('id')->on('item_conditions')->onDelete('cascade');
         });
     }
 
