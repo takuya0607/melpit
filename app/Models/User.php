@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -36,4 +36,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function soldItems()
+    {
+      // 第二引数には多側のキー(外部キー)であるseller_idを指定
+        return $this->hasMany(Item::class, 'seller_id');
+    }
+
+    // ユーザーが購入した商品を取得するメソッド
+    public function boughtItems()
+    {
+        return $this->hasMany(Item::class, 'buyer_id');
+    }
 }
