@@ -7,21 +7,23 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-8 offset-2 bg-white">
+            <div class="mx-auto col col-12 col-sm-11 col-md-9 col-lg-7 col-xl-6 border">
 
                 <div class="font-weight-bold text-center border-bottom pb-3 pt-3" style="font-size: 24px">商品を出品する</div>
 
-                <form method="POST" action="{{ route('sell') }}" class="p-5" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('sell') }}" class="p-4" enctype="multipart/form-data">
                     @csrf
 
                     {{-- 商品画像 --}}
                     <div>商品画像</div>
-                    <span class="item-image-form image-picker">
-                        <input type="file" name="item-image" class="d-none" accept="image/png,image/jpeg,image/gif" id="item-image" />
-                        <label for="item-image" class="d-inline-block" role="button">
-                            <img src="/images/item-image-default.png" style="object-fit: cover; width: 300px; height: 300px;">
-                        </label>
-                    </span>
+                      <div class="d-flex justify-content-center mt-2">
+                        <span class="item-image-form image-picker">
+                            <input type="file" name="item-image" class="d-none" accept="image/png,image/jpeg,image/gif" id="item-image" />
+                            <label for="item-image" class="d-inline-block" role="button">
+                                <img src="/images/item-image-default.png" style="object-fit: cover; width: 220px; height: 220px;">
+                            </label>
+                        </span>
+                      </div>
                     @error('item-image')
                         <div style="color: #E4342E;" role="alert">
                             <strong>{{ $message }}</strong>
@@ -102,7 +104,7 @@
                         @enderror
                     </div>
 
-                    <div class="form-group mb-0 mt-3">
+                    <div class="form-group mb-0 mt-4">
                         <button type="submit" class="btn btn-block btn-secondary">
                             出品する
                         </button>

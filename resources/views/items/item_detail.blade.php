@@ -6,8 +6,8 @@
 
 @section('content')
 <div class="container">
-    <div class="row">
-        <div class="col-8 offset-2 bg-white">
+    <div class="row border">
+        <div class="mx-auto col col-12 col-sm-10 col-md-8 col-lg-8 col-xl-8">
             <div class="row mt-3">
                 <div class="col-8 offset-2">
                     @if (session('message'))

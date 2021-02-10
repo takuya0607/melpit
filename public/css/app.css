@@ -1,5 +1,52 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
 
+@media (max-width: 767px) {
+  .item-detail-img {
+    margin-right: 25px;
+  }
+
+  .item-detail-text {
+    margin-top: 20px;
+  }
+
+  .card-img-top {
+    height: 250px;
+    width: 80px;
+  }
+}
+
+@media (max-width: 575px) {
+  .itemCard {
+    max-width: 280px;
+    max-height: 300px;
+    margin-bottom: 10px;
+    margin: auto;
+  }
+
+  .card-img-top {
+    max-height: 230px;
+  }
+
+  .bg-secondary {
+    max-height: 120px;
+    max-width: 120px;
+  }
+
+  .input-group-prepend {
+    width: 90px;
+  }
+}
+
+@media (max-width: 400px) {
+  .item-detail-img {
+    margin-right: 20px;
+  }
+
+  .input-group {
+    width: 285px;
+  }
+}
+
 /*!
  * Bootstrap v4.5.3 (https://getbootstrap.com/)
  * Copyright 2011-2020 The Bootstrap Authors
@@ -3574,7 +3621,6 @@ input[type=button].btn-block {
 .dropdown-item {
   display: block;
   width: 100%;
-  /* padding: 0.25rem 1.5rem; */
   clear: both;
   font-weight: 400;
   color: #212529;
@@ -3752,7 +3798,6 @@ input[type=button].btn-block {
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
-  width: 100%;
 }
 
 .input-group > .form-control,
