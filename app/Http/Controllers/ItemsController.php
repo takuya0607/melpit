@@ -8,6 +8,7 @@ use App\Models\PrimaryCategory;
 use App\Models\ItemCondition;
 use Carbon\Carbon;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\File;
@@ -85,10 +86,29 @@ class ItemsController extends Controller
       // これを昇順で並べ替えることで、出品中(selling)の商品が先に、購入済み(bought)の商品が後になるようにソートされる
       $items = $query->orderByRaw( "FIELD(state, '" . Item::STATE_SELLING . "', '" . Item::STATE_BOUGHT . "')" )
           ->orderBy('id', 'DESC')
-          ->paginate(52);
+          ->paginate(8);
+
+        $user = Auth::user();
+
+        $categories = PrimaryCategory::query()
+        ->with([
+            'secondaryCategories' => function ($query) {
+                $query->orderBy('sort_no');
+            }
+        ])
+        ->orderBy('sort_no')
+        ->get();
+
+        $defaults = [
+          'category' => $request->input('category'),
+          'keyword'  => $request->input('keyword'),
+        ];
 
       return view('items.items')
-          ->with('items', $items);
+          ->with('items', $items)
+          ->with('user', $user)
+          ->with('categories', $categories)
+          ->with('defaults', $defaults);
     }
 
     private function escape(string $value)
@@ -277,4 +297,5 @@ class ItemsController extends Controller
       return redirect('/')
       ->with('status', '商品情報を削除しました。');
     }
+
 }

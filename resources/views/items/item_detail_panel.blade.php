@@ -1,10 +1,10 @@
 <div class="font-weight-bold text-center pb-3 pt-3" style="font-size: 24px">{{$item->name}}</div>
 
 <div class="row">
-    <div class="col-4 offset-1">
+    <div class="item-detail-img col-md-4 offset-1">
         <img class="card-img-top" src="/storage/item-images/{{$item->image_file_name}}">
     </div>
-    <div class="col-6">
+    <div class="item-detail-text col-md-6">
         <table class="table table-bordered">
             <tr>
                 <th>出品者</th>

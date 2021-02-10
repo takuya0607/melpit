@@ -9,7 +9,7 @@
 <script src="https://js.pay.jp/v2/pay.js"></script>
 <div class="container">
     <div class="row">
-        <div class="col-8 offset-2 bg-white">
+        <div class="mx-auto col col-12 col-sm-11 col-md-9 col-lg-7 col-xl-6 border">
             <div class="row mt-3">
                 <div class="col-8 offset-2">
                     @if (session('message'))
