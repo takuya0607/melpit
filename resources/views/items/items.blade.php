@@ -8,7 +8,7 @@
 <div class="container">
   <div class="row">
       <!-- 検索フォームの記述 -->
-      <form class="form-inline" method="GET" action="{{ route('top') }}" style="margin:auto;">
+      <form class="original-form" method="GET" action="{{ route('top') }}" style="margin:auto;">
         <div class="input-group mt-3">
           <div class="input-group-prepend">
             <select class="custom-select" name="category" >

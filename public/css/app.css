@@ -42,7 +42,7 @@
     margin-right: 20px;
   }
 
-  .input-group {
+  .original-form {
     width: 285px;
   }
 }
@@ -3621,6 +3621,7 @@ input[type=button].btn-block {
 .dropdown-item {
   display: block;
   width: 100%;
+  padding: 0.25rem 1.5rem;
   clear: both;
   font-weight: 400;
   color: #212529;
@@ -3798,6 +3799,7 @@ input[type=button].btn-block {
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
+  width: 100%;
 }
 
 .input-group > .form-control,

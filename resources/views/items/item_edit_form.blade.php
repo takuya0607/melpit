@@ -121,7 +121,7 @@
                       更新する
                   </button>
                 <div class="form-group mb-0 mt-3">
-                    <a class="dropdown-item" data-toggle="modal" data-target="#modal-delete-{{ $item->id }}">
+                    <a data-toggle="modal" data-target="#modal-delete-{{ $item->id }}">
                       <button type="submit" class="btn btn-block btn-danger">
                           削除する
                       </button>
