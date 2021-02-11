@@ -29,7 +29,8 @@ class ProfileController extends Controller
         // inputタグのname属性に'name'が指定されているかどうかの確認
         if ($request->has('avatar')) {
           // アップロードされた画像の情報を取得
-          $fileName = $this->saveAvatar($request->file('avatar'));
+          $file = $request->file('avatar');
+          $fileName = base64_encode(file_get_contents($request->file('avatar')));
           $user->avatar_file_name = $fileName;
         }
 

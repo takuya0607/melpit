@@ -43,10 +43,18 @@ class SellController extends Controller
       $user = Auth::user();
 
 
-      $imageName = $this->saveImage($request->file('item-image'));
+      // $imageName = $this->saveImage($request->file('item-image'));
 
       $item = new Item();
-      $item->image_file_name = $imageName;
+      // $item->image_file_name = $imageName;
+
+      if ($request->has('item-image')) {
+        // アップロードされた画像の情報を取得
+        $file = $request->file('item-image');
+        $fileName = base64_encode(file_get_contents($request->file('item-image')));
+        $item->image_file_name = $fileName;
+      }
+
       $item->seller_id = $user->id;
       $item->name = $request->input('name');
       $item->description = $request->input('description');
@@ -69,29 +77,29 @@ class SellController extends Controller
       * @param UploadedFile $file アップロードされた商品画像
       * @return string ファイル名
       */
-    private function saveImage(UploadedFile $file): string
-    {
-      // makeTempPathメソッドは一時ファイルを生成してパスを取得する
-      $tempPath = $this->makeTempPath();
+    // private function saveImage(UploadedFile $file): string
+    // {
+    //   // makeTempPathメソッドは一時ファイルを生成してパスを取得する
+    //   $tempPath = $this->makeTempPath();
 
-      // Intervention Imageを使用して、画像をリサイズ後、一時ファイルに保存
-      Image::make($file)->fit(300, 300)->save($tempPath);
+    //   // Intervention Imageを使用して、画像をリサイズ後、一時ファイルに保存
+    //   Image::make($file)->fit(300, 300)->save($tempPath);
 
-      $filePath = Storage::disk('public')
-          ->putFile('item-images', new File($tempPath));
+    //   $filePath = Storage::disk('public')
+    //       ->putFile('item-images', new File($tempPath));
 
-      return basename($filePath);
-    }
+    //   return basename($filePath);
+    // }
 
     /**
     * 一時的なファイルを生成してパスを返します。
     *
     * @return string ファイルパス
     */
-    private function makeTempPath(): string
-    {
-      $tmp_fp = tmpfile();
-      $meta   = stream_get_meta_data($tmp_fp);
-      return $meta["uri"];
-    }
+    // private function makeTempPath(): string
+    // {
+    //   $tmp_fp = tmpfile();
+    //   $meta   = stream_get_meta_data($tmp_fp);
+    //   return $meta["uri"];
+    // }
 }
