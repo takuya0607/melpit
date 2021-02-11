@@ -15,7 +15,7 @@
                 @foreach ($items as $item)
                     <div class="d-flex mt-3 border position-relative">
                         <div>
-                            <img src="/storage/item-images/{{$item->image_file_name}}" class="img-fluid" style="height: 140px;">
+                            <img src="data:image/png;base64,{{$item->image_file_name}}" class="img-fluid" style="height: 140px;">
                         </div>
                         <div class="flex-fill p-3">
                             <div>
