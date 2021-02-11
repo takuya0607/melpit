@@ -1,6 +1,7 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
+          if (!installedModules){ return false;}
 /******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
