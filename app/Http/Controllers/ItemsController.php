@@ -167,7 +167,7 @@ class ItemsController extends Controller
       // 商品画像の更新
         if ($request->has('item-image')) {
           // アップロードされた画像の情報を取得
-          $fileName = $this->saveImage($request->file('item-image'));
+          $fileName = base64_encode(file_get_contents($request->file('item-image')));
           $item->image_file_name = $fileName;
         }
 
